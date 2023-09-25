@@ -1,5 +1,4 @@
-#10分ごとのデータから１年ごとにデータを分けて、30年分のデータをスクレイピングするプログラム
-
+#10分データをスクレイピングするプログラム
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -16,7 +15,7 @@ def day_in_month(year, month):
     elif month in [2] and year % 4 != 0:
         return 28
 # 地点情報のダウンロード
-df_location = pd.read_csv("C:\\Users\\AKITA KOSUKE\\Box\\1_修士課程研究\\プログラム\\地点情報\\location.csv")
+df_location = pd.read_csv("file path")
 
 for l in range(len(df_location)):
     no = df_location.loc[l,"no"]
@@ -77,7 +76,7 @@ for l in range(len(df_location)):
             if month == 12:
             # 12月の場合は全データをまとめたDataFrameをファイルに出力
                 # 出力ファイルのパス
-                output_path = os.path.join("D:\\master_research\\地上データ\\10minute_data_surface\\original", '%04d_%05d_10minute_surface.pkl' %(year, block_no))
+                output_path = os.path.join("Folder Path", '%04d_%05d_10minute_surface.pkl' %(year, block_no))
                 # ファイルに書き出す
                 df_all.to_pickle(output_path)
             
