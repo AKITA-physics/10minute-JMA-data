@@ -1,3 +1,4 @@
+# 慣性小領域と風速の関係を見るプログラム
 import pandas as pd
 import numpy as np
 from scipy import signal
@@ -5,8 +6,8 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-# --------------------------------------------------------データのダウンロード-----------------------------------------------------------------
-df_location = pd.read_csv("C:\\Users\\AKITA KOSUKE\\Box\\1_修士課程研究\\プログラム\\地点情報\\location.csv")
+# 地点データのダウンロード
+df_location = pd.read_csv("file path")
 # 処理した地域をまとめる
 list_block = []
 
@@ -16,7 +17,7 @@ for l in [4, 153, 154]:#range(len(df_location)):
     for year in range(2022,2022+1):
         #データのダウンロード
         # 補間後のデータ
-        df_original = pd.read_csv("D:\\master_research\\地上データ\\10minute_data_surface\\interplolation\\"+str(year)+"_"+str(block_no)+"_10minute_interpolation.csv")
+        df_original = pd.read_csv("file_path")
        
         # カラム'mean'の欠損値の個数
         missing_num = df_original['mean'].isnull().sum()
@@ -26,7 +27,6 @@ for l in [4, 153, 154]:#range(len(df_location)):
         # 欠損がない場合のみ処理
         if missing_rate == 0:
             #---------------------------------------------------------高速フーリエ変換----------------------------------------------------------
-            # df_dataの平均風速のデータに対して観測値から平均値を引く
             signal = np.array(df_original["mean"])
             # 線形トレンドの除去
             signal_d = signal - np.polyval(np.polyfit(np.arange(len(signal)), signal, 1), np.arange(len(signal)))
@@ -43,7 +43,8 @@ for l in [4, 153, 154]:#range(len(df_location)):
             fft_result = np.fft.rfft(signal_d)
             fft_result = np.abs(fft_result)
             fft_result = fft_result[1:]
-            
+
+            #--------------------------------------------------平滑化-----------------------------------------------------------
             # # リストの中の数を平均して減らす
             # def average_of_groups(lst, group_sizes):
             #     averages = []
@@ -69,7 +70,7 @@ for l in [4, 153, 154]:#range(len(df_location)):
             # 移動平均フィルタを適用
             fft_result = np.convolve(fft_result, np.ones(window_size)/window_size, mode='same')
 
-            # 強度の計算
+            # -------------------------------------------強度の計算-------------------------------------------------
             spectrum = freq * fft_result ** 2 / sampling_rate /(N/2)
             exec(f"spectrum_{block_no}_{year} = spectrum")
             
@@ -339,24 +340,6 @@ plt.text(1/(3600), plt.ylim()[1], '1H', ha='center', va='bottom', fontsize=11)
 plt.text(1/(1200), plt.ylim()[1], '20min', ha='center', va='bottom', fontsize=11)
 
 plt.show()
-#---------------------------------------------------風速と慣性小領域が現れる周波数帯の関係を図で見る-------------------------------------------------
-plt.figure()
-plt.clf()
-for i in range(len(df_summary)):
-    mean_wind = df_summary.loc[i, "mean_wind"]
-    center_freq = df_summary.loc[i, "center_freq"]
-    slope = df_summary.loc[i, "slope"]
-    
-    if -0.67 < slope < -0.65:
-        plt.scatter(center_freq, mean_wind, color = "green")
-
-# plt.legend(loc="upper right")
-plt.xscale('log')
-plt.xlabel("Center Frequency", fontsize=14)
-plt.ylabel("Wind Speed(m/s)", fontsize=14)
-plt.tick_params(labelsize=11)
-plt.show()
-
 #---------------------------------------------------方法１に対応：風速と慣性小領域が現れる周波数帯の関係を図で見る-------------------------------------------------
 # plt.figure()
 # plt.clf()
