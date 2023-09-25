@@ -1,10 +1,11 @@
+# 欠損データを補間するプログラム
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import os
 
-# ----------------------------------------------------------データのダウンロード-----------------------------------------------------------------
-df_location = pd.read_csv("C:\\Users\\AKITA KOSUKE\\Box\\1_修士課程研究\\プログラム\\地点情報\\location.csv")
+# 地点データのダウンロード
+df_location = pd.read_csv("file path")
 
 for l in range(64,len(df_location)):
     no = df_location.loc[l,"no"]
@@ -18,8 +19,8 @@ for l in range(64,len(df_location)):
             all_day = 365
             feb_day = 28
             
-        # データのダウンロード
-        file_path = "D:\\master_research\\地上データ\\10minute_data_surface\\original_data\\file_10minute_"+str(no)+"_"+str(block_no)+"_"+str(year)+".pkl"
+        # 気象データのダウンロード
+        file_path = "file path"
         # データが取得できる場合のみ実行する
         if os.path.exists(file_path):
             df_original = pd.read_pickle(file_path)
@@ -113,7 +114,7 @@ for l in range(64,len(df_location)):
             print(missing_rate)
             
             # 出力ファイルのパス
-            output_path = os.path.join("D:\\master_research\\地上データ\\10minute_data_surface\\interplolation_data", '%04d_%05d_10minute_average_data.csv' %(year, block_no))
+            output_path = os.path.join("Folder Path", '%04d_%05d_10minute_average_data.csv' %(year, block_no))
             # ファイルに書き出す
             df_average.to_csv(output_path, index=False)
             #-----------------------------------------------------------補間を行う------------------------------------------------------------------
@@ -190,7 +191,7 @@ for l in range(64,len(df_location)):
             df_data = df_data[new_column_order]
 
             # 出力ファイルのパス
-            output_path = os.path.join("D:\\master_research\\地上データ\\10minute_data_surface\\interplolation", '%04d_%05d_10minute_interpolation.csv' %(year, block_no))
+            output_path = os.path.join("Folder Path", '%04d_%05d_10minute_interpolation.csv' %(year, block_no))
             # ファイルに書き出す
             df_data.to_csv(output_path, index=False)
             
