@@ -133,6 +133,9 @@ for l in range(64,len(df_location)):
                         nan_ranges.append((start_nan_index, index - 1))
                         nan_count = 0
 
+            if nan_count > 0:
+                nan_ranges.append((start_nan_index, len(df_data) - 1))
+
                 # np.nanが含まれている場合
                 if len(nan_ranges) > 0:
                     for i, (start, end) in enumerate(nan_ranges):
