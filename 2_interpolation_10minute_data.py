@@ -132,46 +132,45 @@ for l in range(64,len(df_location)):
                     if nan_count > 0:
                         nan_ranges.append((start_nan_index, index - 1))
                         nan_count = 0
-
             if nan_count > 0:
                 nan_ranges.append((start_nan_index, len(df_data) - 1))
 
-                # np.nanが含まれている場合
-                if len(nan_ranges) > 0:
-                    for i, (start, end) in enumerate(nan_ranges):
+            # np.nanが含まれている場合
+            if len(nan_ranges) > 0:
+                for i, (start, end) in enumerate(nan_ranges):
 
-                        # データフレームの生成
-                        newframe = pd.DataFrame(columns=["linear","average_mean","linear_average"])
-                        if start == 0:
-                            df_data['mean'][start:end+1] = df_average['average_mean'][start:end+1]
-                        elif end == len(df_data)-1:
-                            df_data['mean'][start:end+1] = df_average['average_mean'][start:end+1]
-                        else:
-                            # -----------------------------------------補間する---------------------------------------------------
-                            # df_dataの欠損部分を線形補間してnewframeに代入
-                            newframe["linear"] = df_data.iloc[start-1:end+1+1, df_data.columns.get_loc('mean')].interpolate()
-                            # インデックスナンバーをリセット
-                            newframe = newframe.reset_index(drop=True)
+                    # データフレームの生成
+                    newframe = pd.DataFrame(columns=["linear","average_mean","linear_average"])
+                    if start == 0:
+                        df_data['mean'][start:end+1] = df_average['average_mean'][start:end+1]
+                    elif end == len(df_data)-1:
+                        df_data['mean'][start:end+1] = df_average['average_mean'][start:end+1]
+                    else:
+                        # -----------------------------------------補間する---------------------------------------------------
+                        # df_dataの欠損部分を線形補間してnewframeに代入
+                        newframe["linear"] = df_data.iloc[start-1:end+1+1, df_data.columns.get_loc('mean')].interpolate()
+                        # インデックスナンバーをリセット
+                        newframe = newframe.reset_index(drop=True)
                                 
-                            # df_averageの指定された行をnewframeに代入
-                            newframe_average = df_average['average_mean'][start-1:end+1+1]
-                            # インデックスナンバーをリセット
-                            newframe_average = newframe_average.reset_index(drop=True)
-                            newframe["average_mean"] =newframe_average
+                        # df_averageの指定された行をnewframeに代入
+                        newframe_average = df_average['average_mean'][start-1:end+1+1]
+                        # インデックスナンバーをリセット
+                        newframe_average = newframe_average.reset_index(drop=True)
+                        newframe["average_mean"] =newframe_average
 
-                            # 特定の値をnp.nanに置き換える
-                            newframe_average[1:end+1] = np.nan
-                            # np.nanにしたところを線形補間
-                            newframe_linear_average = newframe_average.interpolate()
-                            # newframeに代入
-                            newframe["linear_average"] = newframe_linear_average
+                        # 特定の値をnp.nanに置き換える
+                        newframe_average[1:end+1] = np.nan
+                        # np.nanにしたところを線形補間
+                        newframe_linear_average = newframe_average.interpolate()
+                        # newframeに代入
+                        newframe["linear_average"] = newframe_linear_average
                                 
-                            #newframeの端をけずる（欠損値のみを扱うため）
-                            newframe = newframe[1:len(newframe)-1]
+                        #newframeの端をけずる（欠損値のみを扱うため）
+                        newframe = newframe[1:len(newframe)-1]
 
-                            # 元データの線形補完に平均データの変動を加える
-                            df_data.iloc[start:end+1, df_data.columns.get_loc('mean')]\
-                                = newframe["linear"]+newframe["average_mean"]-newframe["linear_average"]
+                        # 元データの線形補完に平均データの変動を加える
+                        df_data.iloc[start:end+1, df_data.columns.get_loc('mean')]\
+                            = newframe["linear"]+newframe["average_mean"]-newframe["linear_average"]
 
             # カラム'mean'の欠損値の個数
             missing_num = df_data['mean'].isnull().sum()
