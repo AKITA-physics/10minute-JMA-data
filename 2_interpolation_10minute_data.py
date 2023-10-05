@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import os
 
 # 地点データのダウンロード
-df_location = pd.read_csv("file path")
+df_location = pd.read_csv("地点情報に関するデータのパス")
 
 for l in range(64,len(df_location)):
     no = df_location.loc[l,"no"]
@@ -20,7 +20,7 @@ for l in range(64,len(df_location)):
             feb_day = 28
             
         # 気象データのダウンロード
-        file_path = "file path"
+        file_path = "気象データのパス"
         # データが取得できる場合のみ実行する
         if os.path.exists(file_path):
             df_original = pd.read_pickle(file_path)
@@ -114,7 +114,7 @@ for l in range(64,len(df_location)):
             print(missing_rate)
             
             # 出力ファイルのパス
-            output_path = os.path.join("Folder Path", '%04d_%05d_10minute_average_data.csv' %(year, block_no))
+            output_path = os.path.join("平均データを格納するフォルダのパス", '%04d_%05d_10minute_average_data.csv' %(year, block_no))
             # ファイルに書き出す
             df_average.to_csv(output_path, index=False)
             #-----------------------------------------------------------補間を行う------------------------------------------------------------------
@@ -189,7 +189,7 @@ for l in range(64,len(df_location)):
             df_data = df_data[new_column_order]
 
             # 出力ファイルのパス
-            output_path = os.path.join("Folder Path", '%04d_%05d_10minute_interpolation.csv' %(year, block_no))
+            output_path = os.path.join("補間後のデータを格納するフォルダ", '%04d_%05d_10minute_interpolation.csv' %(year, block_no))
             # ファイルに書き出す
             df_data.to_csv(output_path, index=False)
             
