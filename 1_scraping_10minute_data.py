@@ -15,7 +15,7 @@ def day_in_month(year, month):
     elif month in [2] and year % 4 != 0:
         return 28
 # 地点情報のダウンロード
-df_location = pd.read_csv("file path")
+df_location = pd.read_csv("地点情報に関するデータのパス")
 
 for l in range(len(df_location)):
     no = df_location.loc[l,"no"]
@@ -76,7 +76,7 @@ for l in range(len(df_location)):
             if month == 12:
             # 12月の場合は全データをまとめたDataFrameをファイルに出力
                 # 出力ファイルのパス
-                output_path = os.path.join("Folder Path", '%04d_%05d_10minute_surface.pkl' %(year, block_no))
+                output_path = os.path.join("ファイルを格納するフォルダーのパス", '%04d_%05d_10minute_surface.pkl' %(year, block_no))
                 # ファイルに書き出す
                 df_all.to_pickle(output_path)
             
