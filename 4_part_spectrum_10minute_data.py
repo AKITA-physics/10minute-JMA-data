@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
 # 地点データのダウンロード
-df_location = pd.read_csv("file path")
+df_location = pd.read_csv("地点情報に関するデータのパス")
 # 処理した地域をまとめる
 list_block = []
 
@@ -16,7 +16,7 @@ for l in range(len(df_location)):
     for year in range(2022,2022+1):
         # 気象データのダウンロード
         # 補間後のデータ
-        df_original = pd.read_csv("file path")
+        df_original = pd.read_csv("補間後の気象データのパス")
 
         # カラム'mean'の欠損値の個数
         missing_num = df_original['mean'].isnull().sum()
