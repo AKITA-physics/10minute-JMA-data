@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import os
-import numpy as np
 
 def day_in_month(year, month):
     if month in [1,3,5,7,8,10,12]:
